@@ -1,44 +1,66 @@
 package es.usj.zaragozatrips.fragments
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment
+import android.content.pm.PackageManager
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.CameraUpdateFactory
+import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 
 import es.usj.zaragozatrips.R
+import es.usj.zaragozatrips.models.Coordinate
+import es.usj.zaragozatrips.models.Place
+import es.usj.zaragozatrips.services.DataManager
 import kotlinx.android.synthetic.main.fragment_near_me.*
 
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [NearMeFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- */
 class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
-    override fun onMarkerClick(marker: Marker): Boolean {
-        val id = marker.position
-
-        return true
-    }
-
     private var mListener: OnFragmentInteractionListener? = null
     private lateinit var map: GoogleMap
+    private val PERMISSIONS_REQUEST_LOCATION = 100
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        DataManager.getData(::onDataReady)
         return inflater.inflate(R.layout.fragment_near_me, container, false)
+    }
+
+    private fun onDataReady(places: Array<Place>) {
+        if(places.isEmpty()){
+            loadingError()
+            return
+        }
+
+        showPlacesInMap(places)
+    }
+
+    private fun showPlacesInMap(places: Array<Place>?) {
+        map.clear()
+
+        places?.forEach {
+            with(it) {
+                map.addMarker(com.google.android.gms.maps.model.MarkerOptions()
+                        .position(com.google.android.gms.maps.model.LatLng(coordinate.latitude, coordinate.longitude))
+                        .title(name)
+                )
+            }
+        }
+    }
+
+    private fun loadingError() {
+        Toast.makeText(activity, getString(R.string.problem_loading), Toast.LENGTH_LONG).show()
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -47,28 +69,65 @@ class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         mapView.onCreate(savedInstanceState)
         mapView.onResume()
         mapView.getMapAsync(this)
+
+        foodPlacesButton.setOnClickListener {
+            filterPlaces("Comida & Bebida")
+        }
+
+        museumPlaceButton.setOnClickListener {
+            filterPlaces("Museo & Monumento")
+        }
+
+        entertainmentPlacesButton.setOnClickListener {
+            filterPlaces("Entretenimiento")
+        }
+
+        allPlacesButton.setOnClickListener {
+            filterPlaces(null)
+        }
+    }
+
+    private fun filterPlaces(type: String?){
+        val places = DataManager.filterPlaces(type)
+        showPlacesInMap(places)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-
-        val sydney = LatLng(-34.0, 151.0)
-        map.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
-        val sydney2 = LatLng(-50.0, 151.0)
-        map.addMarker(MarkerOptions().position(sydney2).title("Marker in Sydney"))
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney2))
         map.setOnMarkerClickListener(this)
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSIONS_REQUEST_LOCATION)
+        }
+        else {
+            map.isMyLocationEnabled = true
+        }
     }
 
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
+        if(requestCode == PERMISSIONS_REQUEST_LOCATION) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                map.isMyLocationEnabled = true
+            }
         }
+    }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val coordinate = Coordinate(marker.position.latitude, marker.position.longitude, 0.0)
+        val place = DataManager.findPlace(coordinate)
+
+        if(place != null) {
+            val bundle = Bundle()
+            bundle.putParcelable(getString(R.string.place_item_key), place)
+            val fragment =  PlaceDetailFragment()
+            fragment.arguments = bundle
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+
+        }
+        return false
     }
 
     override fun onAttach(context: Context) {

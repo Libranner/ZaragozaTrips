@@ -46,11 +46,8 @@ class PlaceDetailFragment : Fragment(), ActivityCompat.OnRequestPermissionsResul
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-            place = this.arguments.getParcelable("test")
-            displayData(place)
-
+        place = this.arguments.getParcelable(getString(R.string.place_item_key))
+        displayData(place)
     }
 
     private fun displayData(place: Place) {

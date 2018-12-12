@@ -1,13 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="es.usj.zaragozatrips.fragments.MyPlaceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="es.usj.zaragozatrips.fragments.MyPlacesFragment"
-    tools:listitem="@layout/fragment_myplace" />
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/foodPlacesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/food_places"
+            android:src="@drawable/ic_food_places" />
+
+        <ImageButton
+            android:id="@+id/museumPlaceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/museum_places"
+            android:src="@drawable/ic_monument_places" />
+
+        <ImageButton
+            android:id="@+id/entertainmentPlacesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/entertainment_places"
+            android:src="@drawable/ic_entertainment_places" />
+
+        <ImageButton
+            android:id="@+id/allPlacesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/other_places"
+            android:src="@drawable/ic_other_places" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+
+        android:id="@+id/place_list"
+        android:name="es.usj.zaragozatrips.fragments.MyPlaceFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="es.usj.zaragozatrips.fragments.MyPlacesFragment"
+        tools:listitem="@layout/fragment_myplace" />
+</LinearLayout>
+

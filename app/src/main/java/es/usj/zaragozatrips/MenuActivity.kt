@@ -12,6 +12,7 @@ import es.usj.zaragozatrips.fragments.*
 import es.usj.zaragozatrips.fragments.dummy.DummyContent
 import es.usj.zaragozatrips.models.Coordinate
 import es.usj.zaragozatrips.models.Place
+import es.usj.zaragozatrips.services.DataManager
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
 
@@ -20,14 +21,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         NewPlaceFragment.OnFragmentInteractionListener, NearMeFragment.OnFragmentInteractionListener,
         MyPlacesFragment.OnListFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener,
         PlaceDetailFragment.OnFragmentInteractionListener{
-
-    override fun onListFragmentInteraction(item: DummyContent.DummyItem) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onFragmentInteraction(uri: Uri) {
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,21 +40,26 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         if(savedInstanceState == null) {
-            val bundle = Bundle()
-            val images = arrayOf("https://cdn.traveler.es/uploads/images/thumbs/es/trav/3/s/2018/35/el_calamar_bravo_3337_745x559.jpg",
-                    "https://media-cdn.tripadvisor.com/media/photo-s/06/b1/52/33/el-calamar-bravo.jpg")
-            val place = Place("El Calamar Bravo", "Comida & Bebida", "Desde las 9AM hasta las 10AM",
-                    Coordinate(41.6520855, -0.883574), "https://www.youtube.com/watch?v=cmkV-vWx04o", images,
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nu")
-
-            bundle.putParcelable("test", place)
-
-            val fragment =  PlaceDetailFragment()
-            fragment.arguments = bundle
-
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
-            nav_view.setCheckedItem(R.id.nav_about)
+            //fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, MyPlacesFragment()).commit()
+            nav_view.setCheckedItem(R.id.nav_near_me)
         }
+    }
+
+    override fun onListFragmentInteraction(place: Place) {
+        showPlace(place)
+    }
+
+    override fun onFragmentInteraction(uri: Uri) {
+
+    }
+
+    private fun showPlace(place: Place) {
+        val bundle = Bundle()
+        bundle.putParcelable(getString(R.string.place_item_key), place)
+        val fragment =  PlaceDetailFragment()
+        fragment.arguments = bundle
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
 
     override fun onBackPressed() {

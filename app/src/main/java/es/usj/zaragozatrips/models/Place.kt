@@ -7,17 +7,15 @@ import java.util.*
 /**
  * Created by libranner on 12/12/2018.
  */
-
-
-
 data class Place(
-    val name: String,
-    val tipo: String,
-    val schedule: String,
-    val coordinate: Coordinate,
-    val videUrl: String,
-    val imagesUrl: Array<String>,
-    val description: String): Parcelable {
+        val name: String,
+        val type: String,
+        val schedule: String,
+        val coordinate: Coordinate,
+        val videoUrl: String,
+        val imagesUrl: Array<String>,
+        val website: String,
+        val description: String): Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
@@ -26,15 +24,17 @@ data class Place(
             parcel.readParcelable(Coordinate::class.java.classLoader),
             parcel.readString(),
             parcel.createStringArray(),
+            parcel.readString(),
             parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeString(tipo)
+        parcel.writeString(type)
         parcel.writeString(schedule)
         parcel.writeParcelable(coordinate, flags)
-        parcel.writeString(videUrl)
+        parcel.writeString(videoUrl)
         parcel.writeStringArray(imagesUrl)
+        parcel.writeString(website)
         parcel.writeString(description)
     }
 
@@ -49,10 +49,10 @@ data class Place(
         other as Place
 
         if (name != other.name) return false
-        if (tipo != other.tipo) return false
+        if (type != other.type) return false
         if (schedule != other.schedule) return false
         if (coordinate != other.coordinate) return false
-        if (videUrl != other.videUrl) return false
+        if (videoUrl != other.videoUrl) return false
         if (!Arrays.equals(imagesUrl, other.imagesUrl)) return false
         if (description != other.description) return false
 
@@ -61,10 +61,10 @@ data class Place(
 
     override fun hashCode(): Int {
         var result = name.hashCode()
-        result = 31 * result + tipo.hashCode()
+        result = 31 * result + type.hashCode()
         result = 31 * result + schedule.hashCode()
         result = 31 * result + coordinate.hashCode()
-        result = 31 * result + videUrl.hashCode()
+        result = 31 * result + videoUrl.hashCode()
         result = 31 * result + Arrays.hashCode(imagesUrl)
         result = 31 * result + description.hashCode()
         return result

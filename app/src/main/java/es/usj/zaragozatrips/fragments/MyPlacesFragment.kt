@@ -9,10 +9,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import es.usj.zaragozatrips.R
-import es.usj.zaragozatrips.fragments.dummy.DummyContent
-import es.usj.zaragozatrips.fragments.dummy.DummyContent.DummyItem
+import es.usj.zaragozatrips.models.Place
+import es.usj.zaragozatrips.services.DataManager
+import kotlinx.android.synthetic.main.fragment_myplace_list.*
 
 /**
  * A fragment representing a list of Items.
@@ -26,7 +28,6 @@ import es.usj.zaragozatrips.fragments.dummy.DummyContent.DummyItem
  * fragment (e.g. upon screen orientation changes).
  */
 class MyPlacesFragment : Fragment() {
-    // TODO: Customize parameters
     private var mColumnCount = 1
     private var mListener: OnListFragmentInteractionListener? = null
 
@@ -38,23 +39,70 @@ class MyPlacesFragment : Fragment() {
         }
     }
 
+    private lateinit var rView: View
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_myplace_list, container, false)
+        rView = inflater.inflate(R.layout.fragment_myplace_list, container, false)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            val context = view.getContext()
-            if (mColumnCount <= 1) {
-                view.layoutManager = LinearLayoutManager(context)
-            } else {
-                view.layoutManager = GridLayoutManager(context, mColumnCount)
-            }
-            view.adapter = MyPlaceRecyclerViewAdapter(DummyContent.ITEMS, mListener)
-        }
-        return view
+        DataManager.getData(::onDataReady)
+        return rView
     }
 
+    private fun onDataReady(places: Array<Place>) {
+        if(places.isEmpty()){
+            loadingError()
+            return
+        }
+
+        val recyclerView = rView.findViewById(R.id.place_list) as RecyclerView
+        recyclerView.adapter = MyPlaceRecyclerViewAdapter(DataManager.places.toTypedArray(), mListener)
+
+        if (mColumnCount <= 1) {
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        } else {
+            recyclerView.layoutManager = GridLayoutManager(context, mColumnCount)
+        }
+        showPlaces(places)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        foodPlacesButton.setOnClickListener {
+            filterPlaces("Comida & Bebida")
+        }
+
+        museumPlaceButton.setOnClickListener {
+            filterPlaces("Museo & Monumento")
+        }
+
+        entertainmentPlacesButton.setOnClickListener {
+            filterPlaces("Entretenimiento")
+        }
+
+        allPlacesButton.setOnClickListener {
+            filterPlaces(null)
+        }
+    }
+
+    private fun filterPlaces(type: String?){
+        val places = DataManager.filterPlaces(type)
+        if(places == null) {
+            showPlaces(arrayOf())
+        }
+        else {
+            showPlaces(places)
+        }
+    }
+
+    private fun showPlaces(places: Array<Place>) {
+        val recyclerView = rView.findViewById(R.id.place_list) as RecyclerView
+        recyclerView.adapter = MyPlaceRecyclerViewAdapter(places, mListener)
+    }
+
+    private fun loadingError() {
+        Toast.makeText(activity, getString(R.string.problem_loading), Toast.LENGTH_LONG).show()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -81,7 +129,7 @@ class MyPlacesFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem)
+        fun onListFragmentInteraction(place: Place)
     }
 
     companion object {
