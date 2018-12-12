@@ -7,62 +7,42 @@ import android.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 
 import es.usj.zaragozatrips.R
-import kotlinx.android.synthetic.main.fragment_near_me.*
-
+import es.usj.zaragozatrips.models.Coordinate
+import es.usj.zaragozatrips.models.Place
+import kotlinx.android.synthetic.main.fragment_place_detail.*
 
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [NearMeFragment.OnFragmentInteractionListener] interface
+ * [PlaceDetailFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
  */
-class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
-    override fun onMarkerClick(marker: Marker): Boolean {
-        val id = marker.position
-
-        return true
-    }
+class PlaceDetailFragment : Fragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
-    private lateinit var map: GoogleMap
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle): View? {
+        // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_near_me, container, false)
+        val images = arrayOf("https://bit.ly/2B9pPGC", "https://bit.ly/2QOYp2C")
+        val place = Place("El Calamar Bravo", "Comida & Bebida", "Desde las 9AM hasta las 10AM",
+                Coordinate(-30f, 150.1f), "https://www.youtube.com/watch?v=cmkV-vWx04o", images,
+                "orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nu")
+
+
+        return inflater.inflate(R.layout.fragment_place_detail, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        mapView.onCreate(savedInstanceState)
-        mapView.onResume()
-        mapView.getMapAsync(this)
+    private fun displayData(place: Place) {
+        place_name_text_view.text = place.name
+        description_text_view.text = place.description
+        schedule_text_view.text = place.schedule
+        
     }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-
-        val sydney = LatLng(-34.0, 151.0)
-        map.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
-        val sydney2 = LatLng(-50.0, 151.0)
-        map.addMarker(MarkerOptions().position(sydney2).title("Marker in Sydney"))
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney2))
-        map.setOnMarkerClickListener(this)
-    }
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {

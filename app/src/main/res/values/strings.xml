@@ -9,4 +9,14 @@
     <string name="my_places">My Places</string>
     <string name="about_the_app">About the App</string>
     <string name="about">About...</string>
+    <string name="food_places">Food Places</string>
+    <string name="other_places">Other Places</string>
+    <string name="entertainment_places">Entertainment Places</string>
+    <string name="museum_places">Museum Places</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="gradient">gradient</string>
+    <string name="time">time</string>
+    <string name="location">location</string>
 </resources>
