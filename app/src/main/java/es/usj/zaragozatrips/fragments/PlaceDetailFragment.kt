@@ -1,17 +1,26 @@
 package es.usj.zaragozatrips.fragments
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment
+import android.content.pm.PackageManager
+import android.location.Location
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.squareup.picasso.Picasso
 
 import es.usj.zaragozatrips.R
-import es.usj.zaragozatrips.models.Coordinate
 import es.usj.zaragozatrips.models.Place
 import kotlinx.android.synthetic.main.fragment_place_detail.*
+import android.content.Intent
 
 /**
  * A simple [Fragment] subclass.
@@ -19,29 +28,76 @@ import kotlinx.android.synthetic.main.fragment_place_detail.*
  * [PlaceDetailFragment.OnFragmentInteractionListener] interface
  * to handle interaction events.
  */
-class PlaceDetailFragment : Fragment() {
+class PlaceDetailFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
 
     private var mListener: OnFragmentInteractionListener? = null
-
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val PERMISSIONS_REQUEST_LOCATION = 100
+    lateinit var place: Place
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle): View? {
-        // Inflate the layout for this fragment
+                              savedInstanceState: Bundle?): View? {
 
-        val images = arrayOf("https://bit.ly/2B9pPGC", "https://bit.ly/2QOYp2C")
-        val place = Place("El Calamar Bravo", "Comida & Bebida", "Desde las 9AM hasta las 10AM",
-                Coordinate(-30f, 150.1f), "https://www.youtube.com/watch?v=cmkV-vWx04o", images,
-                "orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nu")
-
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
 
         return inflater.inflate(R.layout.fragment_place_detail, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+
+            place = this.arguments.getParcelable("test")
+            displayData(place)
+
     }
 
     private fun displayData(place: Place) {
         place_name_text_view.text = place.name
         description_text_view.text = place.description
         schedule_text_view.text = place.schedule
-        
+        Picasso.get().load(place.imagesUrl[0]).into(main_image_view)
+        distance_text_view.text = getString(R.string.calculating)
+
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSIONS_REQUEST_LOCATION)
+        }
+        else {
+            calculateDistance()
+        }
+
+        navigateToButton.setOnClickListener {
+            val gmmIntentUri = Uri.parse("google.navigation:q=${place.coordinate.latitude}, ${place.coordinate.longitude}")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.`package` = "com.google.android.apps.maps"
+            startActivity(mapIntent)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == PERMISSIONS_REQUEST_LOCATION) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                calculateDistance()
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun calculateDistance() {
+        fusedLocationClient.lastLocation
+                .addOnSuccessListener { location : Location? ->
+                    if(location != null) {
+                        val result = FloatArray(1)
+                        Location.distanceBetween(place.coordinate.latitude, place.coordinate.longitude,
+                                location.latitude, location.longitude, result)
+                        val meters = result[0]/ 1000.0
+                        distance_text_view.text = getString(R.string.km_two_decimals_format).format(meters)
+                    }
+                }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -78,4 +134,4 @@ class PlaceDetailFragment : Fragment() {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
-}// Required empty public constructor
+}

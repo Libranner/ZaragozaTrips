@@ -19,4 +19,6 @@
     <string name="gradient">gradient</string>
     <string name="time">time</string>
     <string name="location">location</string>
+    <string name="calculating">Calculating...</string>
+    <string name="km_two_decimals_format">%.2f km</string>
 </resources>

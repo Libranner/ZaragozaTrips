@@ -10,39 +10,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/navigateToButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:tint="@android:color/background_light"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_image_view"
+            app:srcCompat="@drawable/ic_navigation" />
+
         <ImageView
-            android:id="@+id/place_imageview"
+            android:id="@+id/main_image_view"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="0dp"
+            android:background="@drawable/gradient"
             android:contentDescription="@string/my_places"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_place"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             android:contentDescription="@string/location"
             android:src="@drawable/ic_near_me"
             android:tint="@color/colorPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/place_imageview" />
+            app:layout_constraintTop_toBottomOf="@+id/main_image_view" />
 
         <TextView
             android:id="@+id/distance_text_view"
-            android:layout_width="240dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="TextView"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
-            app:layout_constraintTop_toBottomOf="@+id/place_imageview" />
+            app:layout_constraintTop_toBottomOf="@+id/main_image_view" />
 
 
         <ImageView
@@ -59,11 +72,10 @@
 
         <TextView
             android:id="@+id/schedule_text_view"
-            android:layout_width="240dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/imageView5"
             app:layout_constraintTop_toBottomOf="@+id/distance_text_view" />
 
@@ -74,7 +86,6 @@
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="TextView"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textSize="24sp"
@@ -88,29 +99,15 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:text="TextView"
-            android:textAlignment="center"
+            android:layout_marginTop="16dp"
+            android:textAlignment="textStart"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/place_name_text_view" />
 
-        <ImageView
-            android:id="@+id/main_image_view"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:alpha="0.2"
-            android:contentDescription="@string/gradient"
-            android:src="@drawable/gradient"
-            app:layout_constraintBottom_toBottomOf="@+id/place_imageview"
-            app:layout_constraintEnd_toEndOf="@+id/place_imageview"
-            app:layout_constraintStart_toStartOf="@+id/place_imageview"
-            app:layout_constraintTop_toTopOf="@+id/place_imageview" />
-
     </android.support.constraint.ConstraintLayout>
-
-
 
 
 </android.support.v4.widget.NestedScrollView>
