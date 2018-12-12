@@ -71,15 +71,15 @@ class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         mapView.getMapAsync(this)
 
         foodPlacesButton.setOnClickListener {
-            filterPlaces("Comida & Bebida")
+            filterPlaces(getString(R.string.food_beverage_key))
         }
 
         museumPlaceButton.setOnClickListener {
-            filterPlaces("Museo & Monumento")
+            filterPlaces(getString(R.string.museum_key))
         }
 
         entertainmentPlacesButton.setOnClickListener {
-            filterPlaces("Entretenimiento")
+            filterPlaces(getString(R.string.entertainment_key))
         }
 
         allPlacesButton.setOnClickListener {

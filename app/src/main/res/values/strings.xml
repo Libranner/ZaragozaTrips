@@ -23,4 +23,7 @@
     <string name="km_two_decimals_format">%.2f km</string>
     <string name="place_item_key">PLACE_ITEM_KEY</string>
     <string name="problem_loading">There was a problem during the data download</string>
+    <string name="entertainment_key">Entretenimiento</string>
+    <string name="museum_key"><![CDATA[Museo & Monumento]]></string>
+    <string name="food_beverage_key"><![CDATA[Comida & Bebida]]></string>
 </resources>

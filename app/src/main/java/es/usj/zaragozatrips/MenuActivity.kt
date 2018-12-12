@@ -98,7 +98,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, MyPlacesFragment()).commit()
             }
             R.id.nav_about -> {
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, PlaceDetailFragment()).commit()
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, AboutFragment()).commit()
             }
         }
 
