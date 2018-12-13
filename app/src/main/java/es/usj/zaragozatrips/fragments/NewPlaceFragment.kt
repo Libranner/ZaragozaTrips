@@ -63,14 +63,16 @@ class NewPlaceFragment : Fragment() {
         }
 
         CustomDataManager.getData {
-            val path = it.last().imagesUrl[0]
-            val imgFile = File(path)
+            if(it.isNotEmpty()) {
+                val path = it.last().imagesUrl[0]
+                val imgFile = File(path)
 
-            if (imgFile.exists()) {
-                takePhotoButton.setImageURI(Uri.parse(path))
-                //val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                //takePhotoButton.setImageBitmap(myBitmap)
-                //Picasso.get().load(imgFile).centerCrop().into(takePhotoButton)
+                if (imgFile.exists()) {
+                    takePhotoButton.setImageURI(Uri.parse(path))
+                    //val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                    //takePhotoButton.setImageBitmap(myBitmap)
+                    //Picasso.get().load(imgFile).centerCrop().into(takePhotoButton)
+                }
             }
         }
 
