@@ -28,6 +28,13 @@ import es.usj.zaragozatrips.services.CustomDataManager
 import kotlinx.android.synthetic.main.fragment_new_place.*
 import java.util.*
 import kotlin.collections.ArrayList
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import com.squareup.picasso.Picasso
+import java.io.File
+import java.nio.file.Files.exists
+
+
 
 /**
  * A simple [Fragment] subclass.
@@ -39,6 +46,7 @@ class NewPlaceFragment : Fragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
     private var fileUri: Uri? = null
+    private var imagePath: String? = null
     private val TAKE_PHOTO_REQUEST = 101
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +63,15 @@ class NewPlaceFragment : Fragment() {
         }
 
         CustomDataManager.getData {
-            takePhotoButton.setImageURI(Uri.parse(it[1].imagesUrl[0]))
+            val path = it.last().imagesUrl[0]
+            val imgFile = File(path)
+
+            if (imgFile.exists()) {
+                takePhotoButton.setImageURI(Uri.parse(path))
+                //val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                //takePhotoButton.setImageBitmap(myBitmap)
+                //Picasso.get().load(imgFile).centerCrop().into(takePhotoButton)
+            }
         }
 
         saveButton.setOnClickListener {
@@ -64,7 +80,7 @@ class NewPlaceFragment : Fragment() {
 
                 val coord = Coordinate(0.0, 0.0,0.0)
                 val images = ArrayList<String>()
-                images.add(fileUri.toString())
+                images.add(imagePath!!)
 
                 val place = CustomPlace(UUID.randomUUID(),
                         nameTextView.text.toString(),
@@ -109,7 +125,7 @@ class NewPlaceFragment : Fragment() {
     }
 
     private fun validateData(): Boolean {
-        if (fileUri == null || nameTextView.text.isBlank()) {
+        if (imagePath == null || imagePath!!.isBlank() || nameTextView.text.isBlank()) {
             Toast.makeText(activity, getString(R.string.invalid_place_message), Toast.LENGTH_SHORT).show()
             return false
         }
@@ -166,9 +182,25 @@ class NewPlaceFragment : Fragment() {
             //photo from camera
             //display the photo on the imageview
             takePhotoButton.setImageURI(fileUri)
+            imagePath = getRealPathFromURI(fileUri)
+
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    fun getRealPathFromURI(uri: Uri?): String {
+        var path = ""
+        if (activity.contentResolver != null && uri != null) {
+            val cursor = activity.contentResolver.query(uri, null, null, null, null)
+            if (cursor != null) {
+                cursor.moveToFirst()
+                val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                path = cursor.getString(idx)
+                cursor.close()
+            }
+        }
+        return path
     }
 
     /**
