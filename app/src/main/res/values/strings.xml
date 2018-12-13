@@ -26,4 +26,10 @@
     <string name="museum_key"><![CDATA[Museo & Monumento]]></string>
     <string name="food_beverage_key"><![CDATA[Comida & Bebida]]></string>
     <string name="app_display_name">Z Trips</string>
+    <string name="clary_morla">Clary Morla</string>
+    <string name="libranner_santos">Libranner Santos</string>
+    <string name="developers">Developers</string>
+    <string name="logo">logo</string>
+    <string name="logo_usj">logo_usj</string>
+    <string name="app_description">App para identificar lugares de interés en Zaragoza.</string>
 </resources>

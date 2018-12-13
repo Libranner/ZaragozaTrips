@@ -9,10 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import es.usj.zaragozatrips.fragments.*
-import es.usj.zaragozatrips.fragments.dummy.DummyContent
-import es.usj.zaragozatrips.models.Coordinate
 import es.usj.zaragozatrips.models.Place
-import es.usj.zaragozatrips.services.DataManager
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
 
