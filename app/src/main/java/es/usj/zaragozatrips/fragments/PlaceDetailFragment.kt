@@ -97,13 +97,6 @@ class PlaceDetailFragment : Fragment(), ActivityCompat.OnRequestPermissionsResul
                 }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -128,7 +121,6 @@ class PlaceDetailFragment : Fragment(), ActivityCompat.OnRequestPermissionsResul
      * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
      */
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
 }

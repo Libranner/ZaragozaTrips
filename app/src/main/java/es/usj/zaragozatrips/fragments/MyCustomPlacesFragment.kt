@@ -16,33 +16,23 @@ import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.services.DataManager
 import kotlinx.android.synthetic.main.fragment_myplace_list.*
 
-/**
- * A fragment representing a list of Items.
- *
- *
- * Activities containing this fragment MUST implement the [OnListFragmentInteractionListener]
- * interface.
- */
-/**
- * Mandatory empty constructor for the fragment manager to instantiate the
- * fragment (e.g. upon screen orientation changes).
- */
-class MyPlacesFragment : Fragment() {
-    private var mColumnCount = 1
-    private var mListener: OnListFragmentInteractionListener? = null
+class MyCustomPlacesFragment : Fragment() {
+
+    private var mCustomColumnCount = 1
+    private var mCustomListener: OnListFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (arguments != null) {
-            mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
+            mCustomColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
         }
     }
 
     private lateinit var rView: View
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        rView = inflater.inflate(R.layout.fragment_myplace_list, container, false)
+        rView = inflater.inflate(R.layout.fragment_my_custom_places_list, container, false)
 
         DataManager.getData(::onDataReady)
         return rView
@@ -54,11 +44,11 @@ class MyPlacesFragment : Fragment() {
             return
         }
 
-        val recyclerView = rView.findViewById(R.id.place_list) as RecyclerView
-        if (mColumnCount <= 1) {
+        val recyclerView = rView.findViewById(R.id.custom_place_list) as RecyclerView
+        if (mCustomColumnCount <= 1) {
             recyclerView.layoutManager = LinearLayoutManager(context)
         } else {
-            recyclerView.layoutManager = GridLayoutManager(context, mColumnCount)
+            recyclerView.layoutManager = GridLayoutManager(context, mCustomColumnCount)
         }
         showPlaces(places)
     }
@@ -94,8 +84,8 @@ class MyPlacesFragment : Fragment() {
     }
 
     private fun showPlaces(places: Array<Place>) {
-        val recyclerView = rView.findViewById(R.id.place_list) as RecyclerView
-        recyclerView.adapter = MyPlaceRecyclerViewAdapter(places, mListener)
+        val recyclerView = rView.findViewById(R.id.custom_place_list) as RecyclerView
+        recyclerView.adapter = MyCustomPlaceRecyclerViewAdapter(places, mCustomListener)
     }
 
     private fun loadingError() {
@@ -105,7 +95,7 @@ class MyPlacesFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnListFragmentInteractionListener) {
-            mListener = context
+            mCustomListener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
         }
@@ -113,7 +103,7 @@ class MyPlacesFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
+        mCustomListener = null
     }
 
     /**

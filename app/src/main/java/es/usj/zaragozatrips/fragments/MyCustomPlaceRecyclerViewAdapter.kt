@@ -8,14 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import es.usj.zaragozatrips.R
-import es.usj.zaragozatrips.fragments.MyPlacesFragment.OnListFragmentInteractionListener
 import es.usj.zaragozatrips.models.Place
 
-class MyPlaceRecyclerViewAdapter(private val mValues: Array<Place>, private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<MyPlaceRecyclerViewAdapter.ViewHolder>() {
+class MyCustomPlaceRecyclerViewAdapter(private val mValues: Array<Place>, private val mCustomListener: MyCustomPlacesFragment.OnListFragmentInteractionListener?) : RecyclerView.Adapter<MyCustomPlaceRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_myplace, parent, false)
+                .inflate(R.layout.fragment_my_custom_places, parent, false)
         return ViewHolder(view)
     }
 
@@ -27,11 +26,11 @@ class MyPlaceRecyclerViewAdapter(private val mValues: Array<Place>, private val 
         Picasso.get().load(place.imagesUrl[0]).into(holder.imageView)
 
         holder.mView.setOnClickListener {
-            if (mListener != null) {
+            if (mCustomListener != null) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
                 val item = holder.mItem
-                mListener.onListFragmentInteraction(item)
+                mCustomListener.onListFragmentInteraction(item)
             }
         }
     }
@@ -48,8 +47,8 @@ class MyPlaceRecyclerViewAdapter(private val mValues: Array<Place>, private val 
         lateinit var mItem: Place
 
         init {
-            imageView = mView.findViewById(R.id.place_image_view)
-            titleTextView = mView.findViewById(R.id.titleTextView)
+            imageView = mView.findViewById(R.id.custom_place_image_view)
+            titleTextView = mView.findViewById(R.id.titleTextViewCustom)
             distanceTextView = mView.findViewById(R.id.distanceTextView)
         }
     }

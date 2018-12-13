@@ -154,7 +154,6 @@ class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
      * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
      */
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
 }// Required empty public constructor

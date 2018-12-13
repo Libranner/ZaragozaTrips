@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/foodPlacesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/food_places"
+            android:src="@drawable/ic_food_places" />
+
+        <ImageButton
+            android:id="@+id/museumPlaceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/museum_places"
+            android:src="@drawable/ic_monument_places" />
+
+        <ImageButton
+            android:id="@+id/entertainmentPlacesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/entertainment_places"
+            android:src="@drawable/ic_entertainment_places" />
+
+        <ImageButton
+            android:id="@+id/allPlacesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/other_places"
+            android:src="@drawable/ic_other_places" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+
+        android:id="@+id/custom_place_list"
+        android:name="es.usj.zaragozatrips.fragments.MyCustomPlacesFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context="es.usj.zaragozatrips.fragments.MyCustomPlacesFragment"
+        tools:listitem="@layout/fragment_my_custom_places" />
+</LinearLayout>

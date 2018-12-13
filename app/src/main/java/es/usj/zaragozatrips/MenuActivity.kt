@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.app_bar_menu.*
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
         NewPlaceFragment.OnFragmentInteractionListener, NearMeFragment.OnFragmentInteractionListener,
         MyPlacesFragment.OnListFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener,
-        PlaceDetailFragment.OnFragmentInteractionListener{
+        PlaceDetailFragment.OnFragmentInteractionListener, MyCustomPlacesFragment.OnListFragmentInteractionListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if(savedInstanceState == null) {
             //fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, MyPlacesFragment()).commit()
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
             nav_view.setCheckedItem(R.id.nav_near_me)
         }
     }
