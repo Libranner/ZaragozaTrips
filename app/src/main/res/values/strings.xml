@@ -26,4 +26,5 @@
     <string name="entertainment_key">Entretenimiento</string>
     <string name="museum_key"><![CDATA[Museo & Monumento]]></string>
     <string name="food_beverage_key"><![CDATA[Comida & Bebida]]></string>
+    <string name="my_custom_places">mycustomplaces</string>
 </resources>
