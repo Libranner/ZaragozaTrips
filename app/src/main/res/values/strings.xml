@@ -32,4 +32,10 @@
     <string name="logo">logo</string>
     <string name="logo_usj">logo_usj</string>
     <string name="app_description">App para identificar lugares de interés en Zaragoza.</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="video">video</string>
+    <string name="camera">camera</string>
+    <string name="save">Save</string>
+    <string name="invalid_place_message">Please make sure tou filled the name text field and took a picture</string>
 </resources>
