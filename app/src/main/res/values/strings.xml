@@ -26,4 +26,5 @@
     <string name="entertainment_key">Entretenimiento</string>
     <string name="museum_key"><![CDATA[Museo & Monumento]]></string>
     <string name="food_beverage_key"><![CDATA[Comida & Bebida]]></string>
+    <string name="app_display_name">Z Trips</string>
 </resources>
