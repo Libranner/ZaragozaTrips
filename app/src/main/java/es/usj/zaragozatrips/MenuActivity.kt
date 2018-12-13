@@ -10,8 +10,10 @@ import android.view.Menu
 import android.view.MenuItem
 import es.usj.zaragozatrips.fragments.*
 import es.usj.zaragozatrips.models.Place
+import es.usj.zaragozatrips.services.CustomDataManager
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
+import java.util.*
 
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -23,6 +25,12 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
         setSupportActionBar(toolbar)
+
+        CustomDataManager.initialize(this.filesDir)
+
+        CustomDataManager.getData {
+            var l  = it
+        }
 
         /*fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)

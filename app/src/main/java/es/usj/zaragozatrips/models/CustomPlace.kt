@@ -8,9 +8,9 @@ import java.util.*
 
 data class CustomPlace(
         val id: UUID,
-        val name: String,
-        val description: String,
-        val coordinate: Coordinate,
-        val videosUrl: Array<String>,
-        val imagesUrl: Array<String>
+        var name: String,
+        var description: String,
+        var coordinate: Coordinate,
+        var videosUrl: MutableList<String>,
+        var imagesUrl: MutableList<String>
         )

@@ -21,7 +21,13 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 
 import es.usj.zaragozatrips.R
+import es.usj.zaragozatrips.models.Coordinate
+import es.usj.zaragozatrips.models.CustomPlace
+import es.usj.zaragozatrips.models.Place
+import es.usj.zaragozatrips.services.CustomDataManager
 import kotlinx.android.synthetic.main.fragment_new_place.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -48,9 +54,26 @@ class NewPlaceFragment : Fragment() {
             askCameraPermission()
         }
 
+        CustomDataManager.getData {
+            takePhotoButton.setImageURI(Uri.parse(it[1].imagesUrl[0]))
+        }
+
         saveButton.setOnClickListener {
             if(validateData()) {
                 Toast.makeText(activity, "New place saved", Toast.LENGTH_SHORT).show()
+
+                val coord = Coordinate(0.0, 0.0,0.0)
+                val images = ArrayList<String>()
+                images.add(fileUri.toString())
+
+                val place = CustomPlace(UUID.randomUUID(),
+                        nameTextView.text.toString(),
+                        descriptionTextView.text.toString(),
+                        coord,
+                        arrayListOf(),
+                        images
+                        )
+                CustomDataManager.saveNewCustomPlace(place)
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
             }
         }
@@ -94,49 +117,46 @@ class NewPlaceFragment : Fragment() {
     }
 
     //ask for permission to take photo
-    fun askCameraPermission(){
-        Dexter.withActivity(activity)
-                .withPermissions(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ).withListener(object : MultiplePermissionsListener {
-                    override fun onPermissionsChecked(report: MultiplePermissionsReport) {/* ... */
-                        if(report.areAllPermissionsGranted()){
-                            //once permissions are granted, launch the camera
-                            launchCamera()
-                        }else{
-                            Toast.makeText(activity, "All permissions need to be granted to take photo", Toast.LENGTH_LONG).show()
-                        }
+    fun askCameraPermission() = Dexter.withActivity(activity)
+            .withPermissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ).withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport) {/* ... */
+                    if(report.areAllPermissionsGranted()){
+                        //once permissions are granted, launch the camera
+                        launchCamera()
+                    }else{
+                        Toast.makeText(activity, "All permissions need to be granted to take photo", Toast.LENGTH_LONG).show()
                     }
+                }
 
-                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?, token: PermissionToken?) {
-                        //show alert dialog with permission options
-                        AlertDialog.Builder(activity)
-                                .setTitle(
-                                        "Permissions Error!")
-                                .setMessage(
-                                        "Please allow permissions to take photo with camera")
-                                .setNegativeButton(
-                                        android.R.string.cancel,
-                                        { dialog, _ ->
-                                            dialog.dismiss()
-                                            token?.cancelPermissionRequest()
-                                        })
-                                .setPositiveButton(android.R.string.ok,
-                                        { dialog, _ ->
-                                            dialog.dismiss()
-                                            token?.continuePermissionRequest()
-                                        })
-                                .setOnDismissListener({
-                                    token?.cancelPermissionRequest() })
-                                .show()
-                    }
+                override fun onPermissionRationaleShouldBeShown(permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?, token: PermissionToken?) {
+                    //show alert dialog with permission options
+                    AlertDialog.Builder(activity)
+                            .setTitle(
+                                    "Permissions Error!")
+                            .setMessage(
+                                    "Please allow permissions to take photo with camera")
+                            .setNegativeButton(
+                                    android.R.string.cancel
+                            ) { dialog, _ ->
+                                dialog.dismiss()
+                                token?.cancelPermissionRequest()
+                            }
+                            .setPositiveButton(android.R.string.ok
+                            ) { dialog, _ ->
+                                dialog.dismiss()
+                                token?.continuePermissionRequest()
+                            }
+                            .setOnDismissListener {
+                                token?.cancelPermissionRequest() }
+                            .show()
+                }
 
 
 
-                }).check()
-
-    }
+            }).check()
 
     //override function that is called once the photo has been taken
     override fun onActivityResult(requestCode: Int, resultCode: Int,
