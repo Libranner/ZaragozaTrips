@@ -42,4 +42,5 @@
     <string name="camera">camera</string>
     <string name="save">Save</string>
     <string name="invalid_place_message">Please make sure tou filled the name text field and took a picture</string>
+    <string name="you_ve_arrived">You\'ve arrived!</string>
 </resources>

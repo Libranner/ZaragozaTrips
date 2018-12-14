@@ -93,7 +93,12 @@ class PlaceDetailFragment : Fragment(), ActivityCompat.OnRequestPermissionsResul
                         Location.distanceBetween(place.coordinate.latitude, place.coordinate.longitude,
                                 location.latitude, location.longitude, result)
                         val meters = result[0]/ 1000.0
-                        distance_text_view.text = getString(R.string.km_two_decimals_format).format(meters)
+                        if(meters < 3.0) {
+                            distance_text_view.text = getString(R.string.you_ve_arrived)
+                        }
+                        else {
+                            distance_text_view.text = getString(R.string.km_two_decimals_format).format(meters)
+                        }
                     }
                 }
     }
