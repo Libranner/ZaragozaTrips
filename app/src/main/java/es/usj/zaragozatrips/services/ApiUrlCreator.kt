@@ -1,4 +1,4 @@
-package es.usj.song_quiz.services
+package es.usj.zaragozatrips.services
 
 /**
  * Created by libranner on 09/12/2018.

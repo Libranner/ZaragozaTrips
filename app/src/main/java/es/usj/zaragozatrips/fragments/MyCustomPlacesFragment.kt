@@ -44,7 +44,6 @@ class MyCustomPlacesFragment : Fragment() {
 
     private fun onDataReady(customPlaces: Array<CustomPlace>) {
         if(customPlaces.isEmpty()){
-            loadingError()
             return
         }
 

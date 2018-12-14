@@ -1,7 +1,4 @@
 package es.usj.zaragozatrips.services
-
-import es.usj.song_quiz.services.ApiUrlCreator
-import es.usj.song_quiz.services.AsyncTaskJsonHandler
 import es.usj.zaragozatrips.models.Coordinate
 import es.usj.zaragozatrips.models.Place
 import org.json.JSONArray
@@ -13,7 +10,7 @@ object DataManager {
     var places: ArrayList<Place> = arrayListOf()
     var onDataReady: ((places: Array<Place>) -> Unit)? = null
 
-    fun getData(onDataReady: ((places: Array<Place>) -> Unit)?) {
+    fun loadData(onDataReady: ((places: Array<Place>) -> Unit)?) {
         this.onDataReady = onDataReady
         AsyncTaskJsonHandler(::handlerJson).execute(ApiUrlCreator.createURL("places.json"))
     }

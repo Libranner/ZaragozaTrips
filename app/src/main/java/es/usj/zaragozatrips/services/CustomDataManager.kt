@@ -1,11 +1,8 @@
 package es.usj.zaragozatrips.services
 
 import com.google.gson.Gson
-import es.usj.song_quiz.services.ApiUrlCreator
-import es.usj.song_quiz.services.AsyncTaskJsonHandler
 import es.usj.zaragozatrips.models.Coordinate
 import es.usj.zaragozatrips.models.CustomPlace
-import org.json.JSONArray
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -15,7 +12,6 @@ import kotlin.collections.ArrayList
  */
 object CustomDataManager {
     var places: ArrayList<CustomPlace> = arrayListOf()
-    var onDataReady: ((places: Array<CustomPlace>) -> Unit)? = null
     val filename = "custom_places.json"
     private lateinit var directory: File
 
@@ -77,13 +73,7 @@ object CustomDataManager {
     }
 
     fun getData(onDataReady: ((places: Array<CustomPlace>) -> Unit)?) {
-        this.onDataReady = onDataReady
-        AsyncTaskJsonHandler(::handlerJson).execute(ApiUrlCreator.createURL("places.json"))
-    }
-
-    private fun handlerJson(result: String?) {
         readJson()
-
         if(onDataReady != null) {
             onDataReady!!(places.toTypedArray())
         }

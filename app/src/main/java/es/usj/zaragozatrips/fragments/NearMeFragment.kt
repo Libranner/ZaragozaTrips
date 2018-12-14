@@ -11,11 +11,11 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 
 import es.usj.zaragozatrips.R
@@ -34,7 +34,7 @@ class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
                               savedInstanceState: Bundle?): View? {
 
         activity.title = getString(R.string.title_base, getString(R.string.near_me))
-        DataManager.getData(::onDataReady)
+        DataManager.loadData(::onDataReady)
         return inflater.inflate(R.layout.fragment_near_me, container, false)
     }
 
@@ -45,6 +45,7 @@ class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
         }
 
         showPlacesInMap(places)
+        selectButton(allPlacesButton)
     }
 
     private fun showPlacesInMap(places: Array<Place>?) {
@@ -73,18 +74,35 @@ class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
 
         foodPlacesButton.setOnClickListener {
             filterPlaces(getString(R.string.food_beverage_key))
+            selectButton(foodPlacesButton)
         }
 
         museumPlaceButton.setOnClickListener {
             filterPlaces(getString(R.string.museum_key))
+            selectButton(museumPlaceButton)
         }
 
         entertainmentPlacesButton.setOnClickListener {
             filterPlaces(getString(R.string.entertainment_key))
+            selectButton(entertainmentPlacesButton)
         }
 
         allPlacesButton.setOnClickListener {
             filterPlaces(null)
+            selectButton(allPlacesButton)
+        }
+    }
+
+    private fun selectButton(button: ImageButton) {
+        val buttons = arrayOf(foodPlacesButton, museumPlaceButton, entertainmentPlacesButton, allPlacesButton)
+
+        buttons.forEach {
+            if(it.id == button.id){
+                it.backgroundTintList = activity.getColorStateList(R.color.selected_button_color);
+            }
+            else {
+                it.backgroundTintList = activity.getColorStateList(R.color.default_color_button);
+            }
         }
     }
 

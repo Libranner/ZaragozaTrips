@@ -14,13 +14,13 @@ import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import es.usj.zaragozatrips.MenuActivity
 import es.usj.zaragozatrips.models.Place
 
 object LocationHelper {
     private lateinit var locationManager: LocationManager
     var lastVisitedPlace: Place? = null
     var lastPlaceRecommended: Place? = null
-
 
     @SuppressLint("MissingPermission")
     fun lastLocation() : Location {
@@ -35,7 +35,7 @@ object LocationHelper {
                 ).withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport) {/* ... */
                         if(report.areAllPermissionsGranted()){
-                            setupLocationListener(manager)
+                            setupLocationListener(manager, activity)
                         }else{
                             Toast.makeText(activity, "All permissions need to be granted to get location", Toast.LENGTH_LONG).show()
                         }
@@ -67,14 +67,14 @@ object LocationHelper {
     }
 
     @SuppressLint("MissingPermission")
-    fun setupLocationListener(manager: LocationManager) {
+    private fun setupLocationListener(manager: LocationManager, activity: Activity) {
 
         // Define a listener that responds to location updates
         val locationListener = object : LocationListener {
 
             override fun onLocationChanged(location: Location) {
                 // Called when a new location is found by the network location provider.
-                checkUserLocation(location)
+                checkUserLocation(location, activity)
             }
 
             override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
@@ -87,13 +87,11 @@ object LocationHelper {
             }
         }
 
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 300000,
                 0f,locationListener)
     }
 
-    private fun checkUserLocation(location: Location) {
-        Log.v("Location: ", location.toString())
-
+    private fun checkUserLocation(location: Location, activity: Activity) {
         if(lastVisitedPlace != null) {
             val result = FloatArray(1)
             Location.distanceBetween(lastVisitedPlace!!.coordinate.latitude,
@@ -103,6 +101,7 @@ object LocationHelper {
             val meters = result[0] / 1000.0
             if (meters > lastVisitedPlace!!.coordinate.radio) {
                 //Fire Notification to Show Near Places
+                NotificationHelper.send(activity, "Keep it up!", "There are more places to see", true)
                 lastVisitedPlace = null
             }
         }
@@ -115,6 +114,7 @@ object LocationHelper {
 
                 if(closePlace?.name != lastPlaceRecommended?.name) {
                     //Fire Notification Close Place to Visit
+                    NotificationHelper.send(activity, "Place info", "Let us show you a cool place nearby", closePlace)
                 }
             }
         }

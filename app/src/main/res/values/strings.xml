@@ -43,4 +43,6 @@
     <string name="save">Save</string>
     <string name="invalid_place_message">Please make sure tou filled the name text field and took a picture</string>
     <string name="you_ve_arrived">You\'ve arrived!</string>
+    <string name="channel_name">ztrips_channel</string>
+    <string name="channel_description">ztrips</string>
 </resources>

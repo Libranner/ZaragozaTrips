@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 
@@ -46,8 +45,8 @@ class MyPlacesFragment : Fragment() {
     private lateinit var rView: View
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        rView = inflater.inflate(R.layout.fragment_myplace_list, container, false)
 
+        rView = inflater.inflate(R.layout.fragment_myplace_list, container, false)
         return rView
     }
 
@@ -70,7 +69,7 @@ class MyPlacesFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        DataManager.getData(::onDataReady)
+        DataManager.loadData(::onDataReady)
 
         foodPlacesButton.setOnClickListener {
             filterPlaces(getString(R.string.food_beverage_key))

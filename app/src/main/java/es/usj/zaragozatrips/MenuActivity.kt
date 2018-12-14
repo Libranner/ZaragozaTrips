@@ -1,5 +1,6 @@
 package es.usj.zaragozatrips
 
+import android.app.NotificationManager
 import android.content.Context
 import android.location.LocationManager
 import android.net.Uri
@@ -17,6 +18,7 @@ import es.usj.zaragozatrips.services.CustomDataManager
 import es.usj.zaragozatrips.services.LocationHelper.askLocationPermission
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
+import es.usj.zaragozatrips.services.NotificationHelper
 
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -52,6 +54,9 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         askLocationPermission(locationManager, this@MenuActivity)
+
+        NotificationHelper.notificationManager =  getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        NotificationHelper.createNotificationChannel(getString(R.string.channel_name), getString(R.string.channel_description))
     }
 
     override fun onListFragmentInteraction(place: Place) {
@@ -60,6 +65,20 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onFragmentInteraction(uri: Uri) {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val place = intent.getParcelableExtra<Place>(NotificationHelper.PLACE_KEY_ID)
+        if(place != null) {
+            showPlace(place)
+        }
+
+        val showNearPlaces = intent.getBooleanExtra(NotificationHelper.SHOW_NEAR_PLACES_KEY_ID, false)
+        if(showNearPlaces) {
+            showNearPlaces()
+        }
     }
 
     override fun onListFragmentInteraction(customPlace: CustomPlace) {
@@ -105,7 +124,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_near_me -> {
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
+                showNearPlaces()
             }
             R.id.nav_new_place -> {
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, NewPlaceFragment()).commit()
@@ -123,5 +142,9 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun showNearPlaces() {
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
     }
 }
