@@ -19,6 +19,12 @@ object CustomDataManager {
     val filename = "custom_places.json"
     private lateinit var directory: File
 
+    fun findPlace(id: UUID) : CustomPlace? {
+        return places.find {
+            it.id == id
+        }
+    }
+
     fun saveNewCustomPlace(place: CustomPlace) {
         val location = LocationHelper.lastLocation()
         val coordinate = Coordinate(location.latitude,location.longitude, 0.0)
@@ -76,28 +82,6 @@ object CustomDataManager {
     }
 
     private fun handlerJson(result: String?) {
-        /*val jsonArray = JSONArray(result)
-
-        var x = 0
-        while (x < jsonArray.length()) {
-            val jsonObject =  jsonArray.getJSONObject(x)
-
-            val jsonCoordinate =  jsonObject.getString("coordinate").split(",")
-            val coordinate = Coordinate(jsonCoordinate[0].toDouble(), jsonCoordinate[1].toDouble(),
-                    jsonCoordinate[2].toDouble())
-
-            val id = UUID.fromString(jsonObject.getString("id"))
-            places.add(CustomPlace(
-                id,
-                jsonObject.getString("name"),
-                jsonObject.getString("description"),
-                coordinate,
-                jsonObject.getString("videoUrl").split(",").toMutableList(),
-                jsonObject.getString("images").split(",").toMutableList()
-            ))
-            x++
-        }*/
-
         readJson()
 
         if(onDataReady != null) {

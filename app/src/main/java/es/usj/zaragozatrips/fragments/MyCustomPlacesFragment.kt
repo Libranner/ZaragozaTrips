@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import es.usj.zaragozatrips.R
+import es.usj.zaragozatrips.models.CustomPlace
 import es.usj.zaragozatrips.models.Place
+import es.usj.zaragozatrips.services.CustomDataManager
 import es.usj.zaragozatrips.services.DataManager
 import kotlinx.android.synthetic.main.fragment_myplace_list.*
 
@@ -36,12 +38,12 @@ class MyCustomPlacesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         rView = inflater.inflate(R.layout.fragment_my_custom_places_list, container, false)
 
-        DataManager.getData(::onDataReady)
+        CustomDataManager.getData(::onDataReady)
         return rView
     }
 
-    private fun onDataReady(places: Array<Place>) {
-        if(places.isEmpty()){
+    private fun onDataReady(customPlaces: Array<CustomPlace>) {
+        if(customPlaces.isEmpty()){
             loadingError()
             return
         }
@@ -52,12 +54,12 @@ class MyCustomPlacesFragment : Fragment() {
         } else {
             recyclerView.layoutManager = GridLayoutManager(context, mCustomColumnCount)
         }
-        showPlaces(places)
+        showPlaces(customPlaces)
     }
 
-    private fun showPlaces(places: Array<Place>) {
+    private fun showPlaces(customPlaces: Array<CustomPlace>) {
         val recyclerView = rView.findViewById(R.id.custom_place_list) as RecyclerView
-        recyclerView.adapter = MyCustomPlaceRecyclerViewAdapter(places, mCustomListener)
+        recyclerView.adapter = MyCustomPlaceRecyclerViewAdapter(customPlaces, mCustomListener)
     }
 
     private fun loadingError() {
@@ -88,7 +90,7 @@ class MyCustomPlacesFragment : Fragment() {
      * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
      */
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(place: Place)
+        fun onListFragmentInteraction(customPlace: CustomPlace)
     }
 
     companion object {

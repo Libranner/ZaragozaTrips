@@ -8,9 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import es.usj.zaragozatrips.R
+import es.usj.zaragozatrips.models.CustomPlace
 import es.usj.zaragozatrips.models.Place
 
-class MyCustomPlaceRecyclerViewAdapter(private val mValues: Array<Place>, private val mCustomListener: MyCustomPlacesFragment.OnListFragmentInteractionListener?) : RecyclerView.Adapter<MyCustomPlaceRecyclerViewAdapter.ViewHolder>() {
+class MyCustomPlaceRecyclerViewAdapter(private val mValues: Array<CustomPlace>, private val mCustomListener: MyCustomPlacesFragment.OnListFragmentInteractionListener?) : RecyclerView.Adapter<MyCustomPlaceRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -44,7 +45,7 @@ class MyCustomPlaceRecyclerViewAdapter(private val mValues: Array<Place>, privat
         val titleTextView: TextView
         val distanceTextView: TextView
 
-        lateinit var mItem: Place
+        lateinit var mItem: CustomPlace
 
         init {
             imageView = mView.findViewById(R.id.custom_place_image_view)

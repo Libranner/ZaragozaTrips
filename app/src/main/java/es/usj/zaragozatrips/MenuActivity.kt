@@ -1,11 +1,6 @@
 package es.usj.zaragozatrips
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
-import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -13,22 +8,15 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import es.usj.zaragozatrips.fragments.*
+import es.usj.zaragozatrips.models.CustomPlace
 import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.services.CustomDataManager
-import es.usj.zaragozatrips.services.LocationHelper
 import es.usj.zaragozatrips.services.LocationHelper.askLocationPermission
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
-import java.util.*
 
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -42,10 +30,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         CustomDataManager.initialize(this.filesDir)
-
-        CustomDataManager.getData {
-            var l  = it
-        }
 
         /*fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -77,10 +61,18 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    override fun onListFragmentInteraction(customPlace: CustomPlace) {
+        val bundle = Bundle()
+        bundle.putString(getString(R.string.custom_place_item_key), customPlace.id.toString())
+        val fragment = CustomPlaceDetailFragment()
+        fragment.arguments = bundle
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+    }
+
     private fun showPlace(place: Place) {
         val bundle = Bundle()
         bundle.putParcelable(getString(R.string.place_item_key), place)
-        val fragment =  PlaceDetailFragment()
+        val fragment = PlaceDetailFragment()
         fragment.arguments = bundle
         fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
@@ -117,8 +109,11 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_new_place -> {
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, NewPlaceFragment()).commit()
             }
-            R.id.nav_my_places -> {
+            R.id.nav_places -> {
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, MyPlacesFragment()).commit()
+            }
+            R.id.nav_custom_places -> {
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
             }
             R.id.nav_about -> {
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, AboutFragment()).commit()

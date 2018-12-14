@@ -3,7 +3,8 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="places">Places</string>
+    <string name="places">Suggested Places</string>
+    <string name="custom_places">My Places</string>
     <string name="near_me">Near Me</string>
     <string name="new_place">New Place</string>
     <string name="my_places">My Places</string>
@@ -23,6 +24,7 @@
     <string name="calculating">Calculating…</string>
     <string name="km_two_decimals_format">%.2f km</string>
     <string name="place_item_key">PLACE_ITEM_KEY</string>
+    <string name="custom_place_item_key">CUSTOM_PLACE_ITEM_KEY</string>
     <string name="problem_loading">There was a problem during the data download</string>
     <string name="entertainment_key">Entretenimiento</string>
     <string name="museum_key"><![CDATA[Museo & Monumento]]></string>
