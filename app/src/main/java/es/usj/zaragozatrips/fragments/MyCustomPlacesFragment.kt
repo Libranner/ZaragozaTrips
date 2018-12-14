@@ -55,36 +55,6 @@ class MyCustomPlacesFragment : Fragment() {
         showPlaces(places)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        foodPlacesButton.setOnClickListener {
-            filterPlaces(getString(R.string.food_beverage_key))
-        }
-
-        museumPlaceButton.setOnClickListener {
-            filterPlaces(getString(R.string.museum_key))
-        }
-
-        entertainmentPlacesButton.setOnClickListener {
-            filterPlaces(getString(R.string.entertainment_key))
-        }
-
-        allPlacesButton.setOnClickListener {
-            filterPlaces(null)
-        }
-    }
-
-    private fun filterPlaces(type: String?){
-        val places = DataManager.filterPlaces(type)
-        if(places == null) {
-            showPlaces(arrayOf())
-        }
-        else {
-            showPlaces(places)
-        }
-    }
-
     private fun showPlaces(places: Array<Place>) {
         val recyclerView = rView.findViewById(R.id.custom_place_list) as RecyclerView
         recyclerView.adapter = MyCustomPlaceRecyclerViewAdapter(places, mCustomListener)

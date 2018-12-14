@@ -21,6 +21,12 @@ object LocationHelper {
     var lastVisitedPlace: Place? = null
     var lastPlaceRecommended: Place? = null
 
+
+    @SuppressLint("MissingPermission")
+    fun lastLocation() : Location {
+        return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+    }
+
     fun askLocationPermission(manager: LocationManager, activity: Activity) {
         locationManager = manager
         Dexter.withActivity(activity)

@@ -20,6 +20,10 @@ object CustomDataManager {
     private lateinit var directory: File
 
     fun saveNewCustomPlace(place: CustomPlace) {
+        val location = LocationHelper.lastLocation()
+        val coordinate = Coordinate(location.latitude,location.longitude, 0.0)
+        place.coordinate = coordinate
+
         places.add(place)
         writeJson()
     }
