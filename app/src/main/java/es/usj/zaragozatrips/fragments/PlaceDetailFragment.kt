@@ -47,6 +47,7 @@ class PlaceDetailFragment : Fragment(), ActivityCompat.OnRequestPermissionsResul
         super.onViewCreated(view, savedInstanceState)
 
         place = this.arguments.getParcelable(getString(R.string.place_item_key))
+        activity.title = place.name
         displayData(place)
     }
 

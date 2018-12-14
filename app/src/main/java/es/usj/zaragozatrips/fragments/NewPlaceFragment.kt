@@ -52,6 +52,7 @@ class NewPlaceFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        activity.title = getString(R.string.title_base, getString(R.string.new_place))
         return inflater.inflate(R.layout.fragment_new_place, container, false)
     }
 

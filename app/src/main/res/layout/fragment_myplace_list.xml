@@ -17,32 +17,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/colorButton"
             android:contentDescription="@string/food_places"
-            android:src="@drawable/ic_food_places" />
+            android:src="@drawable/ic_food_places"
+            android:tint="@android:color/white" />
 
         <ImageButton
             android:id="@+id/museumPlaceButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/colorButton"
             android:contentDescription="@string/museum_places"
-            android:src="@drawable/ic_monument_places" />
+            android:src="@drawable/ic_monument_places"
+            android:tint="@android:color/white" />
 
         <ImageButton
             android:id="@+id/entertainmentPlacesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/colorButton"
             android:contentDescription="@string/entertainment_places"
-            android:src="@drawable/ic_entertainment_places" />
+            android:src="@drawable/ic_entertainment_places"
+            android:tint="@android:color/white" />
 
         <ImageButton
             android:id="@+id/allPlacesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/colorSelectedButton"
             android:contentDescription="@string/other_places"
-            android:src="@drawable/ic_other_places" />
+            android:src="@drawable/ic_other_places"
+            android:tint="@android:color/white" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

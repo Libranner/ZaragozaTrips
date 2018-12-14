@@ -1,16 +1,31 @@
 package es.usj.zaragozatrips
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import es.usj.zaragozatrips.fragments.*
 import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.services.CustomDataManager
+import es.usj.zaragozatrips.services.LocationHelper
+import es.usj.zaragozatrips.services.LocationHelper.askLocationPermission
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
 import java.util.*
@@ -49,6 +64,9 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             fragmentManager.beginTransaction().replace(R.id.fragment_container, NewPlaceFragment()).commit()
             nav_view.setCheckedItem(R.id.nav_near_me)
         }
+
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        askLocationPermission(locationManager, this@MenuActivity)
     }
 
     override fun onListFragmentInteraction(place: Place) {

@@ -1,13 +1,15 @@
 package es.usj.zaragozatrips.models
 
+import android.location.Location
 import android.os.Parcel
 import android.os.Parcelable
+import es.usj.zaragozatrips.services.LocationHelper
 import java.util.*
 
 /**
  * Created by libranner on 12/12/2018.
  */
-data class Place(
+class Place(
         val name: String,
         val type: String,
         val schedule: String,
@@ -78,6 +80,15 @@ data class Place(
         override fun newArray(size: Int): Array<Place?> {
             return arrayOfNulls(size)
         }
+    }
+
+    fun isCloseTo(location: Location) : Boolean {
+        val result = FloatArray(1)
+        Location.distanceBetween(coordinate.latitude, coordinate.longitude,
+                location.latitude, location.longitude, result)
+
+        val meters = result[0] / 1000.0
+        return (meters <= coordinate.radio)
     }
 }
 

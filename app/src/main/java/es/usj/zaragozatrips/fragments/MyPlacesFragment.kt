@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 
 import es.usj.zaragozatrips.R
@@ -34,6 +36,8 @@ class MyPlacesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        activity.title = getString(R.string.title_base, getString(R.string.places))
+
         if (arguments != null) {
             mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
         }
@@ -44,7 +48,6 @@ class MyPlacesFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         rView = inflater.inflate(R.layout.fragment_myplace_list, container, false)
 
-        DataManager.getData(::onDataReady)
         return rView
     }
 
@@ -61,25 +64,45 @@ class MyPlacesFragment : Fragment() {
             recyclerView.layoutManager = GridLayoutManager(context, mColumnCount)
         }
         showPlaces(places)
+        selectButton(allPlacesButton)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        DataManager.getData(::onDataReady)
+
         foodPlacesButton.setOnClickListener {
             filterPlaces(getString(R.string.food_beverage_key))
+            selectButton(foodPlacesButton)
         }
 
         museumPlaceButton.setOnClickListener {
             filterPlaces(getString(R.string.museum_key))
+            selectButton(museumPlaceButton)
         }
 
         entertainmentPlacesButton.setOnClickListener {
             filterPlaces(getString(R.string.entertainment_key))
+            selectButton(entertainmentPlacesButton)
         }
 
         allPlacesButton.setOnClickListener {
             filterPlaces(null)
+            selectButton(allPlacesButton)
+        }
+    }
+
+    private fun selectButton(button: ImageButton) {
+        val buttons = arrayOf(foodPlacesButton, museumPlaceButton, entertainmentPlacesButton, allPlacesButton)
+
+        buttons.forEach {
+            if(it.id == button.id){
+                it.backgroundTintList = activity.getColorStateList(R.color.selected_button_color);
+            }
+            else {
+                it.backgroundTintList = activity.getColorStateList(R.color.default_color_button);
+            }
         }
     }
 

@@ -33,6 +33,7 @@ class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        activity.title = getString(R.string.title_base, getString(R.string.near_me))
         DataManager.getData(::onDataReady)
         return inflater.inflate(R.layout.fragment_near_me, container, false)
     }

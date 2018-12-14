@@ -24,6 +24,8 @@ class MyCustomPlacesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        activity.title = getString(R.string.title_base, getString(R.string.my_places))
+
         if (arguments != null) {
             mCustomColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
         }
