@@ -48,7 +48,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if(savedInstanceState == null) {
             //fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, NewPlaceFragment()).commit()
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
             nav_view.setCheckedItem(R.id.nav_near_me)
         }
 

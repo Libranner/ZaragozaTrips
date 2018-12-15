@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         tools:context="es.usj.zaragozatrips.fragments.NewPlaceFragment">
 
-        <!-- TODO: Update blank fragment layout -->
 
         <EditText
             android:id="@+id/nameTextView"
@@ -48,9 +47,6 @@
             android:id="@+id/takePhotoButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:contentDescription="@string/camera"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="percent"
@@ -74,6 +70,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
+
+        <ImageView
+            android:id="@+id/custom_place_image_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/my_places"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_place"
+            app:layout_constraintBottom_toBottomOf="@+id/takePhotoButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/takePhotoButton" />
 
 
     </android.support.constraint.ConstraintLayout>

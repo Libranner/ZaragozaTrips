@@ -10,6 +10,11 @@ import com.squareup.picasso.Picasso
 import es.usj.zaragozatrips.R
 import es.usj.zaragozatrips.models.CustomPlace
 import es.usj.zaragozatrips.models.Place
+import es.usj.zaragozatrips.R.id.imageView
+import android.os.Environment.DIRECTORY_PICTURES
+import android.os.Environment.getExternalStoragePublicDirectory
+import java.io.File
+
 
 class MyCustomPlaceRecyclerViewAdapter(private val mValues: Array<CustomPlace>, private val mCustomListener: MyCustomPlacesFragment.OnListFragmentInteractionListener?) : RecyclerView.Adapter<MyCustomPlaceRecyclerViewAdapter.ViewHolder>() {
 
@@ -24,7 +29,13 @@ class MyCustomPlaceRecyclerViewAdapter(private val mValues: Array<CustomPlace>, 
         holder.mItem = place
         holder.titleTextView.text = place.name
         holder.distanceTextView.text = "O KM"
-        Picasso.get().load(place.imagesUrl[0]).into(holder.imageView)
+        //Picasso.get().load(place.imagesUrl[0]).into(holder.imageView)
+
+
+        val file = File(place.imagesUrl[0])
+
+        Picasso.get().load(file).into(holder.imageView)
+
 
         holder.mView.setOnClickListener {
             if (mCustomListener != null) {

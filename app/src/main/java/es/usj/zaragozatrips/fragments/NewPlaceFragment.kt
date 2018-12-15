@@ -13,35 +13,21 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.PermissionRequest
 import android.widget.Toast
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-
 import es.usj.zaragozatrips.R
 import es.usj.zaragozatrips.models.Coordinate
 import es.usj.zaragozatrips.models.CustomPlace
-import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.services.CustomDataManager
 import kotlinx.android.synthetic.main.fragment_new_place.*
 import java.util.*
 import kotlin.collections.ArrayList
-import android.graphics.BitmapFactory
-import android.graphics.Bitmap
 import com.squareup.picasso.Picasso
 import java.io.File
-import java.nio.file.Files.exists
 
-
-
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [NewPlaceFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- */
 class NewPlaceFragment : Fragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
@@ -63,7 +49,12 @@ class NewPlaceFragment : Fragment() {
             askCameraPermission()
         }
 
-        CustomDataManager.getData {
+        custom_place_image_view.visibility = View.GONE
+        custom_place_image_view.setOnClickListener {
+            custom_place_image_view.visibility = View.GONE
+            imagePath = null
+        }
+        /*CustomDataManager.getData {
             if(it.isNotEmpty()) {
                 val path = it.last().imagesUrl[0]
                 val imgFile = File(path)
@@ -75,25 +66,28 @@ class NewPlaceFragment : Fragment() {
                     //Picasso.get().load(imgFile).centerCrop().into(takePhotoButton)
                 }
             }
-        }
+        }*/
 
         saveButton.setOnClickListener {
             if(validateData()) {
-                Toast.makeText(activity, "New place saved", Toast.LENGTH_SHORT).show()
-
-                val coord = Coordinate(0.0, 0.0,0.0)
+                val coordinate = Coordinate(0.0, 0.0,0.0)
                 val images = ArrayList<String>()
                 images.add(imagePath!!)
 
                 val place = CustomPlace(UUID.randomUUID(),
                         nameTextView.text.toString(),
                         descriptionTextView.text.toString(),
-                        coord,
+                        coordinate,
                         arrayListOf(),
                         images
                         )
-                CustomDataManager.saveNewCustomPlace(place)
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
+                if(CustomDataManager.saveNewCustomPlace(place)) {
+                    Toast.makeText(activity, getString(R.string.new_place_saved), Toast.LENGTH_SHORT).show()
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
+                }
+                else {
+                    Toast.makeText(activity, "There was an error saving the new place", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -177,22 +171,22 @@ class NewPlaceFragment : Fragment() {
 
             }).check()
 
-    //override function that is called once the photo has been taken
     override fun onActivityResult(requestCode: Int, resultCode: Int,
                                   data: Intent?) {
         if (resultCode == Activity.RESULT_OK
                 && requestCode == TAKE_PHOTO_REQUEST) {
-            //photo from camera
-            //display the photo on the imageview
-            takePhotoButton.setImageURI(fileUri)
+            //takePhotoButton.setImageURI(fileUri)
             imagePath = getRealPathFromURI(fileUri)
 
+            val file = File(imagePath)
+            custom_place_image_view.visibility = View.VISIBLE
+            Picasso.get().load(file).into(custom_place_image_view)
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    fun getRealPathFromURI(uri: Uri?): String {
+    private fun getRealPathFromURI(uri: Uri?): String {
         var path = ""
         if (activity.contentResolver != null && uri != null) {
             val cursor = activity.contentResolver.query(uri, null, null, null, null)

@@ -1,9 +1,11 @@
 package es.usj.zaragozatrips.services
 
+import android.util.Log
 import com.google.gson.Gson
 import es.usj.zaragozatrips.models.Coordinate
 import es.usj.zaragozatrips.models.CustomPlace
 import java.io.File
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -21,13 +23,20 @@ object CustomDataManager {
         }
     }
 
-    fun saveNewCustomPlace(place: CustomPlace) {
-        val location = LocationHelper.lastLocation()
-        val coordinate = Coordinate(location.latitude,location.longitude, 0.0)
-        place.coordinate = coordinate
+    fun saveNewCustomPlace(place: CustomPlace): Boolean {
+        try {
+            val location = LocationHelper.lastLocation()
+            val coordinate = Coordinate(location.latitude,location.longitude, 0.0)
+            place.coordinate = coordinate
 
-        places.add(place)
-        writeJson()
+            places.add(place)
+            writeJson()
+        }
+        catch(e: Exception) {
+            Log.e("Error: ", e.toString())
+            return false
+        }
+        return true
     }
 
     fun updatePlace(place: CustomPlace) {

@@ -45,4 +45,5 @@
     <string name="you_ve_arrived">You\'ve arrived!</string>
     <string name="channel_name">ztrips_channel</string>
     <string name="channel_description">ztrips</string>
+    <string name="new_place_saved">New place saved</string>
 </resources>

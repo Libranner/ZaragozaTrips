@@ -87,7 +87,7 @@ object LocationHelper {
             }
         }
 
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 300000,
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 0f,locationListener)
     }
 
