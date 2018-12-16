@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso
 import es.usj.zaragozatrips.R
 import es.usj.zaragozatrips.fragments.MyPlacesFragment.OnListFragmentInteractionListener
 import es.usj.zaragozatrips.models.Place
+import es.usj.zaragozatrips.services.LocationHelper
 
 class MyPlaceRecyclerViewAdapter(private val mValues: Array<Place>, private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<MyPlaceRecyclerViewAdapter.ViewHolder>() {
 
@@ -23,7 +24,15 @@ class MyPlaceRecyclerViewAdapter(private val mValues: Array<Place>, private val 
         val place = mValues[position]
         holder.mItem = place
         holder.titleTextView.text = place.name
-        holder.distanceTextView.text = "O KM"
+        val meters = LocationHelper.calculateDistance(place.coordinate)
+
+        if(meters < 3.0) {
+            holder.distanceTextView.text = holder.itemView.context.getString(R.string.you_ve_arrived)
+        }
+        else {
+            holder.distanceTextView.text = holder.itemView.context.getString(R.string.km_two_decimals_format).format(meters)
+        }
+
         Picasso.get().load(place.imagesUrl[0]).into(holder.imageView)
 
         holder.mView.setOnClickListener {

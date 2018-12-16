@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_new_place.*
 import java.util.*
 import kotlin.collections.ArrayList
 import com.squareup.picasso.Picasso
+import es.usj.zaragozatrips.services.UriHelper
 import java.io.File
 
 class NewPlaceFragment : Fragment() {
@@ -176,7 +177,7 @@ class NewPlaceFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK
                 && requestCode == TAKE_PHOTO_REQUEST) {
             //takePhotoButton.setImageURI(fileUri)
-            imagePath = getRealPathFromURI(fileUri)
+            imagePath = UriHelper.getRealPathFromURI(activity, fileUri)
 
             val file = File(imagePath)
             custom_place_image_view.visibility = View.VISIBLE
@@ -186,29 +187,6 @@ class NewPlaceFragment : Fragment() {
         }
     }
 
-    private fun getRealPathFromURI(uri: Uri?): String {
-        var path = ""
-        if (activity.contentResolver != null && uri != null) {
-            val cursor = activity.contentResolver.query(uri, null, null, null, null)
-            if (cursor != null) {
-                cursor.moveToFirst()
-                val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-                path = cursor.getString(idx)
-                cursor.close()
-            }
-        }
-        return path
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(uri: Uri)
     }

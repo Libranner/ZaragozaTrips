@@ -2,6 +2,7 @@ package es.usj.zaragozatrips
 
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -11,7 +12,9 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.example.clarymorlagomez.myvideorecorder.VideoFragment
 import es.usj.zaragozatrips.fragments.*
+import es.usj.zaragozatrips.models.CustomMedia
 import es.usj.zaragozatrips.models.CustomPlace
 import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.services.CustomDataManager
@@ -25,7 +28,13 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         NewPlaceFragment.OnFragmentInteractionListener, NearMeFragment.OnFragmentInteractionListener,
         MyPlacesFragment.OnListFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener,
         PlaceDetailFragment.OnFragmentInteractionListener, MyCustomPlacesFragment.OnListFragmentInteractionListener,
-        CustomPlaceDetailFragment.OnFragmentInteractionListener{
+        CustomPlaceDetailFragment.OnFragmentInteractionListener, MediaGridFragment.OnListFragmentInteractionListener,
+        MediaPreviewFragment.OnFragmentInteractionListener, VideoFragment.OnFragmentVideoUriListener,
+        VideoGridFragment.OnListFragmentInteractionListener, VideoPreviewFragment.OnFragmentInteractionListener{
+
+    override fun onFragmentVideoUri(uri: Uri?) {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +56,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         if(savedInstanceState == null) {
-            //fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
             nav_view.setCheckedItem(R.id.nav_near_me)
         }
 
@@ -61,6 +69,28 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onListFragmentInteraction(place: Place) {
         showPlace(place)
+    }
+
+    override fun onMediaFragmentInteraction(item: String) {
+        val bundle = Bundle()
+        bundle.putString(MediaPreviewFragment.EXTRA_MEDIA_KEY, item)
+        val fragment = MediaPreviewFragment()
+        fragment.arguments = bundle
+
+        val transaction = fragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
+        transaction.replace(R.id.fragment_container, fragment).commit()
+    }
+
+    override fun onVideoFragmentInteraction(item: String) {
+        val bundle = Bundle()
+        bundle.putString(VideoPreviewFragment.EXTRA_MEDIA_KEY, item)
+        val fragment = VideoPreviewFragment()
+        fragment.arguments = bundle
+
+        val transaction = fragmentManager.beginTransaction()
+        transaction.addToBackStack(null)
+        transaction.replace(R.id.fragment_container, fragment).commit()
     }
 
     override fun onFragmentInteraction(uri: Uri) {

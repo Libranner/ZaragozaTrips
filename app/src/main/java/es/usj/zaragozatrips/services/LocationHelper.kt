@@ -15,6 +15,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import es.usj.zaragozatrips.MenuActivity
+import es.usj.zaragozatrips.models.Coordinate
 import es.usj.zaragozatrips.models.Place
 
 object LocationHelper {
@@ -118,5 +119,13 @@ object LocationHelper {
                 }
             }
         }
+    }
+
+    fun calculateDistance(coordinate: Coordinate): Double {
+        val result = FloatArray(1)
+        Location.distanceBetween(coordinate.latitude, coordinate.longitude,
+                lastLocation().latitude, lastLocation().longitude, result)
+        val meters = result[0]/ 1000.0
+        return meters
     }
 }

@@ -15,6 +15,9 @@
     <string name="entertainment_places">Entertainment Places</string>
     <string name="museum_places">Museum Places</string>
 
+    <string name="videos">Videos</string>
+    <string name="photos">Photos</string>
+
     <string name="title_base">Zaragoza Trips: %1$s</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -46,4 +49,7 @@
     <string name="channel_name">ztrips_channel</string>
     <string name="channel_description">ztrips</string>
     <string name="new_place_saved">New place saved</string>
+    <string name="image">image</string>
+    <string name="record">Record</string>
+    <string name="play">Play</string>
 </resources>

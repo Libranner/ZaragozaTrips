@@ -13,10 +13,7 @@ import android.widget.Toast
 
 import es.usj.zaragozatrips.R
 import es.usj.zaragozatrips.models.CustomPlace
-import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.services.CustomDataManager
-import es.usj.zaragozatrips.services.DataManager
-import kotlinx.android.synthetic.main.fragment_myplace_list.*
 
 class MyCustomPlacesFragment : Fragment() {
 
@@ -79,15 +76,6 @@ class MyCustomPlacesFragment : Fragment() {
         mCustomListener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
     interface OnListFragmentInteractionListener {
         fun onListFragmentInteraction(customPlace: CustomPlace)
     }

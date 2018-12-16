@@ -1,5 +1,6 @@
 package es.usj.zaragozatrips.fragments
 
+import android.location.Location
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.R.id.imageView
 import android.os.Environment.DIRECTORY_PICTURES
 import android.os.Environment.getExternalStoragePublicDirectory
+import es.usj.zaragozatrips.services.LocationHelper
 import java.io.File
 
 
@@ -28,9 +30,15 @@ class MyCustomPlaceRecyclerViewAdapter(private val mValues: Array<CustomPlace>, 
         val place = mValues[position]
         holder.mItem = place
         holder.titleTextView.text = place.name
-        holder.distanceTextView.text = "O KM"
-        //Picasso.get().load(place.imagesUrl[0]).into(holder.imageView)
 
+        val meters = LocationHelper.calculateDistance(place.coordinate)
+
+        if(meters < 3.0) {
+            holder.distanceTextView.text = holder.itemView.context.getString(R.string.you_ve_arrived)
+        }
+        else {
+            holder.distanceTextView.text = holder.itemView.context.getString(R.string.km_two_decimals_format).format(meters)
+        }
 
         val file = File(place.imagesUrl[0])
 
