@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
@@ -20,7 +21,7 @@ object NotificationHelper {
     const val SHOW_NEAR_PLACES_KEY_ID = "SHOW_NEAR_PLACES_KEY_ID"
     var notificationManager: NotificationManager? = null
 
-    fun send (context: Activity, title: String, content: String, place: Place?) {
+    fun send (context: Context, title: String, content: String, place: Place?) {
 
         val intent = Intent(context, MenuActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -33,7 +34,7 @@ object NotificationHelper {
         setupNotification(context, intent, title, content)
     }
 
-    fun send (context: Activity, title: String, content: String, showNearPlaces: Boolean) {
+    fun send (context: Context, title: String, content: String, showNearPlaces: Boolean) {
 
         val intent = Intent(context, MenuActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -43,7 +44,7 @@ object NotificationHelper {
         setupNotification(context, intent, title, content)
     }
 
-    private fun setupNotification(context: Activity, intent: Intent, title: String, content: String) {
+    private fun setupNotification(context: Context, intent: Intent, title: String, content: String) {
         val pendingIntent: PendingIntent = PendingIntent.getActivity(context, (Math.random() * 100).toInt(), intent, 0)
         PendingIntent.FLAG_UPDATE_CURRENT
 

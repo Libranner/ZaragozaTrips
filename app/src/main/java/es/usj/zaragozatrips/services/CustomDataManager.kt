@@ -84,7 +84,7 @@ object CustomDataManager {
     fun getData(onDataReady: ((places: Array<CustomPlace>) -> Unit)?) {
         readJson()
         if(onDataReady != null) {
-            onDataReady!!(places.toTypedArray())
+            onDataReady(places.toTypedArray())
         }
     }
 }

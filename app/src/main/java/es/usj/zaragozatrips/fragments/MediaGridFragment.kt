@@ -16,7 +16,6 @@ import java.util.*
 
 class MediaGridFragment : Fragment() {
 
-    // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null

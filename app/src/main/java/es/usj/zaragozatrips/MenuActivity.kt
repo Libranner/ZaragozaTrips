@@ -1,5 +1,7 @@
 package es.usj.zaragozatrips
 
+import android.Manifest
+import android.app.AlertDialog
 import android.app.Fragment
 import android.app.NotificationManager
 import android.content.Context
@@ -12,14 +14,20 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import es.usj.zaragozatrips.fragments.*
 import es.usj.zaragozatrips.models.CustomPlace
 import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.services.CustomDataManager
-import es.usj.zaragozatrips.services.LocationHelper.askLocationPermission
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.app_bar_menu.*
 import es.usj.zaragozatrips.services.NotificationHelper
+import android.content.Intent
+import es.usj.zaragozatrips.services.LocationService
 
 
 class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -54,11 +62,48 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             nav_view.setCheckedItem(R.id.nav_near_me)
         }
 
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        askLocationPermission(locationManager, this@MenuActivity)
+        setupLocationService()
 
         NotificationHelper.notificationManager =  getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         NotificationHelper.createNotificationChannel(getString(R.string.channel_name), getString(R.string.channel_description))
+    }
+
+    private fun setupLocationService() {
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ).withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport) {/* ... */
+                        if(report.areAllPermissionsGranted()){
+                            startService(Intent(this@MenuActivity, LocationService::class.java))
+                        }else{
+                            Toast.makeText(this@MenuActivity, "All permissions need to be granted to get location", Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?, token: PermissionToken?) {
+                        //show alert dialog with permission options
+                        AlertDialog.Builder(this@MenuActivity)
+                                .setTitle(
+                                        "Permissions Error!")
+                                .setMessage(
+                                        "Please allow permissions to get location")
+                                .setNegativeButton(
+                                        android.R.string.cancel
+                                ) { dialog, _ ->
+                                    dialog.dismiss()
+                                    token?.cancelPermissionRequest()
+                                }
+                                .setPositiveButton(android.R.string.ok
+                                ) { dialog, _ ->
+                                    dialog.dismiss()
+                                    token?.continuePermissionRequest()
+                                }
+                                .setOnDismissListener {
+                                    token?.cancelPermissionRequest() }
+                                .show()
+                    }
+                }).check()
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -137,7 +182,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-        return false //TODO: Determine if this is neccesary option buttons in the toolbar
+        return false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

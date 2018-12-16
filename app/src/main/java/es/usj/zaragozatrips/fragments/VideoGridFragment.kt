@@ -16,7 +16,6 @@ import java.util.*
 
 class VideoGridFragment : Fragment() {
 
-    // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null
@@ -74,11 +73,8 @@ class VideoGridFragment : Fragment() {
     }
 
     companion object {
-
-        // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
                 VideoGridFragment().apply {
