@@ -1,8 +1,8 @@
 package es.usj.zaragozatrips
 
+import android.app.Fragment
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -12,9 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.example.clarymorlagomez.myvideorecorder.VideoFragment
 import es.usj.zaragozatrips.fragments.*
-import es.usj.zaragozatrips.models.CustomMedia
 import es.usj.zaragozatrips.models.CustomPlace
 import es.usj.zaragozatrips.models.Place
 import es.usj.zaragozatrips.services.CustomDataManager
@@ -29,12 +27,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         MyPlacesFragment.OnListFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener,
         PlaceDetailFragment.OnFragmentInteractionListener, MyCustomPlacesFragment.OnListFragmentInteractionListener,
         CustomPlaceDetailFragment.OnFragmentInteractionListener, MediaGridFragment.OnListFragmentInteractionListener,
-        MediaPreviewFragment.OnFragmentInteractionListener, VideoFragment.OnFragmentVideoUriListener,
-        VideoGridFragment.OnListFragmentInteractionListener, VideoPreviewFragment.OnFragmentInteractionListener{
-
-    override fun onFragmentVideoUri(uri: Uri?) {
-
-    }
+        MediaPreviewFragment.OnFragmentInteractionListener, VideoGridFragment.OnListFragmentInteractionListener,
+        VideoPreviewFragment.OnFragmentInteractionListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +50,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         if(savedInstanceState == null) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
+            replaceFragment(NearMeFragment())
             nav_view.setCheckedItem(R.id.nav_near_me)
         }
 
@@ -65,6 +59,14 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         NotificationHelper.notificationManager =  getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         NotificationHelper.createNotificationChannel(getString(R.string.channel_name), getString(R.string.channel_description))
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.slide_out) //animations, this must always be set before the replace
+                .replace(R.id.fragment_container, fragment) //replacing current fragment with the new one
+                .addToBackStack(null)
+                .commit()
     }
 
     override fun onListFragmentInteraction(place: Place) {
@@ -77,9 +79,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val fragment = MediaPreviewFragment()
         fragment.arguments = bundle
 
-        val transaction = fragmentManager.beginTransaction()
-        transaction.addToBackStack(null)
-        transaction.replace(R.id.fragment_container, fragment).commit()
+        replaceFragment(fragment)
     }
 
     override fun onVideoFragmentInteraction(item: String) {
@@ -88,9 +88,7 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val fragment = VideoPreviewFragment()
         fragment.arguments = bundle
 
-        val transaction = fragmentManager.beginTransaction()
-        transaction.addToBackStack(null)
-        transaction.replace(R.id.fragment_container, fragment).commit()
+        replaceFragment(fragment)
     }
 
     override fun onFragmentInteraction(uri: Uri) {
@@ -116,7 +114,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bundle.putString(getString(R.string.custom_place_item_key), customPlace.id.toString())
         val fragment = CustomPlaceDetailFragment()
         fragment.arguments = bundle
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+
+        replaceFragment(fragment)
     }
 
     private fun showPlace(place: Place) {
@@ -124,7 +123,8 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bundle.putParcelable(getString(R.string.place_item_key), place)
         val fragment = PlaceDetailFragment()
         fragment.arguments = bundle
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+
+        replaceFragment(fragment)
     }
 
     override fun onBackPressed() {
@@ -157,16 +157,16 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 showNearPlaces()
             }
             R.id.nav_new_place -> {
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, NewPlaceFragment()).commit()
+                replaceFragment(NewPlaceFragment())
             }
             R.id.nav_places -> {
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, MyPlacesFragment()).commit()
+                replaceFragment(MyPlacesFragment())
             }
             R.id.nav_custom_places -> {
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
+                replaceFragment(MyCustomPlacesFragment())
             }
             R.id.nav_about -> {
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, AboutFragment()).commit()
+                replaceFragment(AboutFragment())
             }
         }
 
@@ -175,6 +175,6 @@ class MenuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun showNearPlaces() {
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, NearMeFragment()).commit()
+        replaceFragment(NearMeFragment())
     }
 }

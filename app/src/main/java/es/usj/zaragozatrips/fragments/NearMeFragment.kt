@@ -143,8 +143,12 @@ class NearMeFragment : Fragment(), OnMapReadyCallback, OnMarkerClickListener {
             bundle.putParcelable(getString(R.string.place_item_key), place)
             val fragment =  PlaceDetailFragment()
             fragment.arguments = bundle
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
 
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.slide_out) //animations, this must always be set before the replace
+                    .replace(R.id.fragment_container, fragment) //replacing current fragment with the new one
+                    .addToBackStack(null)
+                    .commit()
         }
         return false
     }

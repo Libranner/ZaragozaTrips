@@ -84,7 +84,11 @@ class NewPlaceFragment : Fragment() {
                         )
                 if(CustomDataManager.saveNewCustomPlace(place)) {
                     Toast.makeText(activity, getString(R.string.new_place_saved), Toast.LENGTH_SHORT).show()
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, MyCustomPlacesFragment()).commit()
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.fade_in, R.anim.slide_out) //animations, this must always be set before the replace
+                            .replace(R.id.fragment_container, MyCustomPlacesFragment()) //replacing current fragment with the new one
+                            .addToBackStack(null)
+                            .commit()
                 }
                 else {
                     Toast.makeText(activity, "There was an error saving the new place", Toast.LENGTH_SHORT).show()

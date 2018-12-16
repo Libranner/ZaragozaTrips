@@ -120,9 +120,11 @@ class CustomPlaceDetailFragment : Fragment(), ActivityCompat.OnRequestPermission
         bundle.putString(getString(R.string.custom_place_item_key), place.id.toString())
         fragment.arguments = bundle
 
-        val transaction = fragmentManager.beginTransaction()
-        transaction.addToBackStack(null)
-        transaction.replace(R.id.fragment_container, fragment).commit()
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.fade_in, R.anim.slide_out) //animations, this must always be set before the replace
+                .replace(R.id.fragment_container, fragment) //replacing current fragment with the new one
+                .addToBackStack(null)
+                .commit()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
